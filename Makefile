@@ -22,6 +22,12 @@ HEADERS = $(addprefix $(HEADERS_DIR)/, $(HEADERS_FILES))
 OBJ=$(SRCS:.c=.o)
 INCLUDES=-I./includes
 
+TEST_DIR=tests
+TEST_NAME=test
+TEST_SRCS=$(addprefix $(TEST_DIR)/$(SRCS_DIR)/test_, $(SRCS_FILES))
+TEST_SRCS+= tests/$(SRCS_DIR)/test_main.c
+TEST_OBJS=$(TEST_SRCS:%.c=%.o)
+
 CC=gcc -Wall -Wextra -Werror
 THREADS = 8
 
@@ -31,6 +37,14 @@ all:
 
 multi:
 	$(MAKE) -j$(THREADS) all
+
+test: all $(TEST_NAME)
+
+$(TEST_NAME): $(NAME) $(TEST_OBJS)
+	$(CC) $(FLAGS) $(TEST_OBJS) ./$(NAME) -o $@
+
+$(TEST_DIR)/%.o:$(TEST_DIR)/%.c $(TEST_INCLUDES)
+	$(CC) $(FLAGS) -I./$(TEST_DIR)/includes -I./includes -c $< -o $@
 
 $(NAME): $(OBJ)
 	@ar rcs $(NAME) $(OBJ) 
@@ -42,6 +56,9 @@ $(NAME): $(OBJ)
 	@$(CC) $(INCLUDES) -c $< -o $@
 	@echo $<
 
+gcov_report:
+
+
 		
 clean:
 	/bin/rm -f $(OBJ)
@@ -49,9 +66,7 @@ fclean: clean
 	/bin/rm -f $(NAME)
 re: fclean all
 
-gcov_report:
 
-test:
 
 .PHONY: lib clean fclean all re multi
 #all, clean, test, s21_matrix.a, gcov_report

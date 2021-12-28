@@ -3,7 +3,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-
+#define NAN 0.0 / 0.0
 
 typedef enum {
     CORRECT_MATRIX = 0,

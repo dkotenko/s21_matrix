@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "color.h"
+#include "tests.h"
 
 void print_result(char *test_name, int result)
 {
