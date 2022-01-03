@@ -15,7 +15,8 @@ SRCS_FILES=s21_calc_complements.c \
 	s21_remove_matrix.c \
 	s21_sub_matrix.c \
 	s21_sum_matrix.c \
-	s21_transpose.c
+	s21_transpose.c \
+	s21_free_matrix.c
 
 SRCS=$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 HEADERS = $(addprefix $(HEADERS_DIR)/, $(HEADERS_FILES))
@@ -23,14 +24,20 @@ OBJ=$(SRCS:.c=.o)
 INCLUDES=-I./includes
 
 TEST_DIR=tests
-TEST_NAME=test
+TEST_NAME=test.bin
 TEST_SRCS=$(addprefix $(TEST_DIR)/$(SRCS_DIR)/test_, $(SRCS_FILES))
 TEST_SRCS+= tests/$(SRCS_DIR)/test_main.c
 TEST_OBJS=$(TEST_SRCS:%.c=%.o)
 
-CC=gcc -Wall -Wextra -Werror
+CC=gcc -Wall -Wextra -Werror -std=c11 -pedantic
+CC_GCOV=gcc -Wall -Wextra -Werror -std=c11 \
+-fcf-protection=full -static-libgcc --coverage -lgcov
 THREADS = 8
 
+gcov_report: CC=$(CC_GCOV)
+gcov_report: fclean test
+	./$(TEST_NAME)
+	gcovr -r . --html -o report.html
 
 all:
 	$(MAKE) -j$(THREADS) $(NAME)
@@ -56,14 +63,14 @@ $(NAME): $(OBJ)
 	@$(CC) $(INCLUDES) -c $< -o $@
 	@echo $<
 
-gcov_report:
-
 
 		
 clean:
 	/bin/rm -f $(OBJ)
+	/bin/rm -f $(TEST_OBJS)
 fclean: clean
 	/bin/rm -f $(NAME)
+	/bin/rm -f $(TEST_NAME)
 re: fclean all
 
 

@@ -1,13 +1,5 @@
 #include "s21_matrix.h"
 
-static void free_matrix(matrix_t *matrix, int i)
-{
-	while (--i > -1) {
-		free(matrix->matrix[i]);
-	}
-	free(matrix->matrix);
-}
-
 matrix_t s21_create_matrix(int rows, int columns)
 {
 	matrix_t matrix;
@@ -17,14 +9,14 @@ matrix_t s21_create_matrix(int rows, int columns)
 		return matrix;
 	}
 
-	matrix.matrix = calloc(rows	, sizeof(double *));
+	matrix.matrix = malloc(sizeof(double *) * rows);
 	if (!matrix.matrix) {
 		return get_incorrect_matrix();
 	}
 	for (int i = 0; i < columns; i++) {
-		matrix.matrix = calloc(columns, sizeof(double));
-		if (!matrix.matrix) {
-			free_matrix(&matrix, i);
+		matrix.matrix[i] = calloc(columns, sizeof(double));
+		if (!matrix.matrix[i]) {
+			s21_free_matrix(&matrix, i);
 			return get_incorrect_matrix();
 		}
 	}

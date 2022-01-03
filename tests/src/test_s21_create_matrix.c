@@ -1,35 +1,13 @@
-#include "s21_matrix.h"
+#include "tests.h"
 
-static void free_matrix(matrix_t *matrix, int i)
+int test_s21_create_matrix(void)
 {
-	while (--i > -1) {
-		free(matrix->matrix[i]);
-	}
-	free(matrix->matrix);
-}
-
-matrix_t s21_create_matrix(int rows, int columns)
-{
-	matrix_t matrix;
-
-	if (rows < 1 || columns < 1) {
-		matrix.matrix_type = INCORRECT_MATRIX;
-		return matrix;
-	}
-
-	matrix.matrix = calloc(rows	, sizeof(double *));
-	if (!matrix.matrix) {
-		return get_incorrect_matrix();
-	}
-	for (int i = 0; i < columns; i++) {
-		matrix.matrix = calloc(columns, sizeof(double));
-		if (!matrix.matrix) {
-			free_matrix(&matrix, i);
-			return get_incorrect_matrix();
-		}
-	}
-	matrix.matrix_type = ZERO_MATRIX;
-	matrix.rows = rows;
-	matrix.columns = columns;
-	return matrix;
+	int r = 0;
+	matrix_t m = s21_create_matrix(3,3);
+	m.matrix[0][0] = 1.;
+	r += m.rows != 3;
+	r += m.columns != 3;
+	r += m.matrix_type != ZERO_MATRIX;
+	s21_free_matrix(&m, m.rows);
+	return r;
 }

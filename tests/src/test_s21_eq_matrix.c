@@ -2,15 +2,42 @@
 #define SUCCESS 1
 #define FAILURE 0
 
-int s21_eq_matrix(matrix_t *A, matrix_t *B)
+static int test_equal()
 {
-	if (!A || !B || A->columns != B->columns || A->rows != B->rows) {
-		return FAILURE;
-	}
-	for (int i = 0; i < A->rows; i++) {
-		if (memcmp(A->matrix[i], B->matrix[i], A->columns * sizeof(double))) {
-			return FAILURE;
-		}
-	}
-	return SUCCESS;
+	int r = 0;
+
+	matrix_t A = s21_create_matrix(2,2);
+	matrix_t B = s21_create_matrix(2,2);
+
+	r += s21_eq_matrix(&A, &B) == FAILURE;
+	s21_free_matrix(&A, A.rows);
+	s21_free_matrix(&B, B.rows);
+	return r;
+}
+
+static int test_non_equal()
+{
+	matrix_t A = s21_create_matrix(2,2);
+	matrix_t B = s21_create_matrix(3,3);
+	matrix_t C = s21_create_matrix(2,2);
+	int r = 0;
+
+	C.matrix[1][1] = 2;
+
+	r += s21_eq_matrix(&A, &B) == SUCCESS;
+	r += s21_eq_matrix(&A, &C) == SUCCESS;
+
+	s21_free_matrix(&A, A.rows);
+	s21_free_matrix(&B, B.rows);
+	s21_free_matrix(&C, C.rows);
+	return r;
+}
+
+int test_s21_eq_matrix()
+{	
+	int r = 0;
+
+	r += test_equal();
+	r += test_non_equal();
+	return r;
 }

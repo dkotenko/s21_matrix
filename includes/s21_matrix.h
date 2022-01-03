@@ -31,6 +31,7 @@ matrix_t s21_calc_complements(matrix_t *A);
 double s21_determinant(matrix_t *A);
 matrix_t s21_inverse_matrix(matrix_t *A);
 matrix_t    get_incorrect_matrix(void);
+void s21_free_matrix(matrix_t *matrix, int i);
 
 
 
