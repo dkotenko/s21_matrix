@@ -29,6 +29,8 @@ TEST_SRCS=$(addprefix $(TEST_DIR)/$(SRCS_DIR)/test_, $(SRCS_FILES))
 TEST_SRCS+= tests/$(SRCS_DIR)/test_main.c
 TEST_OBJS=$(TEST_SRCS:%.c=%.o)
 
+REPORT_NAME=report.html
+
 CC=gcc -Wall -Wextra -Werror -std=c11 -pedantic
 CC_GCOV=gcc -Wall -Wextra -Werror -std=c11 \
 -fcf-protection=full -static-libgcc --coverage -lgcov
@@ -37,7 +39,7 @@ THREADS = 8
 gcov_report: CC=$(CC_GCOV)
 gcov_report: fclean test
 	./$(TEST_NAME)
-	gcovr -r . --html -o report.html
+	gcovr -r . --html -o $(REPORT_NAME)
 
 all:
 	$(MAKE) -j$(THREADS) $(NAME)
@@ -68,6 +70,9 @@ $(NAME): $(OBJ)
 clean:
 	/bin/rm -f $(OBJ)
 	/bin/rm -f $(TEST_OBJS)
+	find . -name "*.gcda" -type f -delete
+	find . -name "*.gcno" -type f -delete
+	/bin/rm -f $(REPORT_NAME)
 fclean: clean
 	/bin/rm -f $(NAME)
 	/bin/rm -f $(TEST_NAME)
