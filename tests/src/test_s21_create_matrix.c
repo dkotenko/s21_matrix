@@ -1,13 +1,23 @@
 #include "tests.h"
 
-int test_s21_create_matrix(void)
-{
-	int r = 0;
+START_TEST(test_create_matrix) {
 	matrix_t m = s21_create_matrix(3,3);
-	m.matrix[0][0] = 1.;
-	r += m.rows != 3;
-	r += m.columns != 3;
-	r += m.matrix_type != ZERO_MATRIX;
+	
+	ck_assert_int_eq(m.rows, 3);
+	ck_assert_int_eq(m.columns, 3);
+	ck_assert_int_eq(m.matrix_type, ZERO_MATRIX);
 	s21_free_matrix(&m, m.rows);
-	return r;
+} END_TEST
+
+
+Suite *create_suite(void) {
+  Suite *s;
+  TCase *tc_core;
+
+  s = suite_create("Create matrix");
+  tc_core = tcase_create("Core");
+
+  tcase_add_test(tc_core, test_create_matrix);
+  suite_add_tcase(s, tc_core);
+  return s;
 }

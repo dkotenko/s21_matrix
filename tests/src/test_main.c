@@ -1,10 +1,22 @@
 #include "color.h"
 #include "tests.h"
 
+void print_matrix(matrix_t m)
+{
+    for (int i = 0; i < m.rows; i++)
+    {
+        for (int j = 0; j < m.columns; j++)
+        {
+            printf("%f ", m.matrix[i][j]);
+        }
+        printf("\n");
+    }
+}
+
 void populate_matrix(double **arr, matrix_t *m)
 {
-    for (int i; i < m->rows; i++) {
-        for (int j; j < m->columns; j++) {
+    for (int i = 0; i < m->rows; i++) {
+        for (int j = 0; j < m->columns; j++) {
             m->matrix[i][j] = arr[i][j];
         }
     }
@@ -37,18 +49,19 @@ int print_result(char *test_name, int r)
     return r;
 }
 
+int main(void) {
+    int no_failed = 0;                   
+    SRunner *runner;
+    
+    runner = srunner_create(free_suite());          
+    srunner_add_suite(runner, create_suite());
+    srunner_add_suite(runner, equal_suite());
+    srunner_add_suite(runner, sum_suite());
+    srunner_add_suite(runner, sub_suite());
+    srunner_add_suite(runner, trans_suite());
 
-int main()
-{
-    int r = 0;
-    
-    
-    r += print_result("Free ", test_s21_free_matrix());
-    r += print_result("Create ", test_s21_create_matrix());
-    r += print_result("Equal ", test_s21_eq_matrix());
-    r += print_result("Sum ", test_s21_sum_matrix());
-    r += print_result("Sub ", test_s21_sub_matrix());
-    r += print_result("Transpose ", test_s21_sub_matrix());
-    print_result("TOTAL", r);
-    return 0;
+    srunner_run_all(runner, CK_NORMAL);  
+    no_failed = srunner_ntests_failed(runner); 
+    srunner_free(runner);                      
+    return (no_failed == 0) ? EXIT_SUCCESS : EXIT_FAILURE;  
 }

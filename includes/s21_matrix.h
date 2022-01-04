@@ -4,6 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 #define NAN 0.0 / 0.0
+#define SUCCESS 1
+#define FAILURE 0
+#include <check.h>
 
 typedef enum {
     CORRECT_MATRIX = 0,
@@ -33,6 +36,7 @@ matrix_t s21_inverse_matrix(matrix_t *A);
 matrix_t    get_incorrect_matrix(void);
 void s21_free_matrix(matrix_t *matrix, int i);
 
+Suite *sub_suite(void);
 
 
 #endif

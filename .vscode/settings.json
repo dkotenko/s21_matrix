@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "s21_matrix.h": "c"
+        "s21_matrix.h": "c",
+        "tests.h": "c"
     }
 }

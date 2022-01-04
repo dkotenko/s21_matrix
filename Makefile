@@ -31,18 +31,19 @@ TEST_OBJS=$(TEST_SRCS:%.c=%.o)
 
 REPORT_NAME=report.html
 
-CC=gcc -Wall -Wextra -Werror -std=c11 -pedantic
+CC=gcc -Wall -Wextra -Werror -std=c11
 CC_GCOV=gcc -Wall -Wextra -Werror -std=c11 \
 -fcf-protection=full -static-libgcc --coverage -lgcov
 THREADS = 8
+
+all: CC=$(CC_GCOV)
+all:
+	$(MAKE) -j$(THREADS) $(NAME)
 
 gcov_report: CC=$(CC_GCOV)
 gcov_report: fclean test
 	./$(TEST_NAME)
 	gcovr -r . --html -o $(REPORT_NAME)
-
-all:
-	$(MAKE) -j$(THREADS) $(NAME)
 
 multi:
 	$(MAKE) -j$(THREADS) all
@@ -50,7 +51,7 @@ multi:
 test: all $(TEST_NAME)
 
 $(TEST_NAME): $(NAME) $(TEST_OBJS)
-	$(CC) $(FLAGS) $(TEST_OBJS) ./$(NAME) -o $@
+	$(CC) $(FLAGS) $(TEST_OBJS) ./$(NAME) -o $@ -lcheck -lm -lpthread -lrt -lsubunit
 
 $(TEST_DIR)/%.o:$(TEST_DIR)/%.c $(TEST_INCLUDES)
 	$(CC) $(FLAGS) -I./$(TEST_DIR)/includes -I./includes -c $< -o $@
