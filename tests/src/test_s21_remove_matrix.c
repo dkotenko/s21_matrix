@@ -1,6 +1,20 @@
 #include "s21_matrix.h"
 
-void s21_remove_matrix(matrix_t *A) {
-	memset(A->matrix, 0, A->rows * A->columns * sizeof(double));
-	A->matrix_type = ZERO_MATRIX;
+START_TEST(test_remove) {
+	matrix_t m = s21_create_matrix(3, 3);
+	s21_free_matrix(&m, m.rows);
+} END_TEST
+
+
+Suite *trans_remove(void) {
+  Suite *s;
+  TCase *tc_core;
+
+  s = suite_create("Remove matrix");
+  tc_core = tcase_create("Core");
+
+  tcase_add_test(tc_core, test_remove);
+  suite_add_tcase(s, tc_core);
+
+  return s;
 }

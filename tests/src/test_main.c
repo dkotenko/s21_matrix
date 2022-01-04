@@ -1,4 +1,3 @@
-#include "color.h"
 #include "tests.h"
 
 void print_matrix(matrix_t m)
@@ -38,17 +37,6 @@ void init_matrixes_3x3(matrix_t *A, matrix_t *B)
 	}
 }
 
-int print_result(char *test_name, int r)
-{
-    int result = r == 0 ? 1 : 0;
-    printf("%s%s - %s%s\n",
-        result ? ANSI_COLOR_GREEN : ANSI_COLOR_RED,
-        test_name,
-        result ? "OK" : "FAILURE",
-        ANSI_COLOR_RESET);
-    return r;
-}
-
 int main(void) {
     int no_failed = 0;                   
     SRunner *runner;
@@ -59,6 +47,7 @@ int main(void) {
     srunner_add_suite(runner, sum_suite());
     srunner_add_suite(runner, sub_suite());
     srunner_add_suite(runner, trans_suite());
+    srunner_add_suite(runner, mult_suite());
 
     srunner_run_all(runner, CK_NORMAL);  
     no_failed = srunner_ntests_failed(runner); 

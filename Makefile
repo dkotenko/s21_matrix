@@ -22,6 +22,8 @@ SRCS=$(addprefix $(SRCS_DIR)/, $(SRCS_FILES))
 HEADERS = $(addprefix $(HEADERS_DIR)/, $(HEADERS_FILES))
 OBJ=$(SRCS:.c=.o)
 INCLUDES=-I./includes
+TEST_INCLUDES_DIR=tests/includes
+TEST_INCLUDES=$(TEST_INCLUDES_DIR)/tests.h
 
 TEST_DIR=tests
 TEST_NAME=test.bin
@@ -43,15 +45,15 @@ all:
 gcov_report: CC=$(CC_GCOV)
 gcov_report: fclean test
 	./$(TEST_NAME)
-	gcovr -r . --html -o $(REPORT_NAME)
+	gcovr -r . -f src --html -o $(REPORT_NAME)
 
 multi:
 	$(MAKE) -j$(THREADS) all
 
-test: all $(TEST_NAME)
+test: $(TEST_NAME)
 
 $(TEST_NAME): $(NAME) $(TEST_OBJS)
-	$(CC) $(FLAGS) $(TEST_OBJS) ./$(NAME) -o $@ -lcheck -lm -lpthread -lrt -lsubunit
+	$(CC) $(FLAGS) $(TEST_OBJS) $(OBJ) -o $@ -lcheck -lm -lpthread -lrt -lsubunit
 
 $(TEST_DIR)/%.o:$(TEST_DIR)/%.c $(TEST_INCLUDES)
 	$(CC) $(FLAGS) -I./$(TEST_DIR)/includes -I./includes -c $< -o $@

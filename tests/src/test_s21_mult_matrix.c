@@ -1,22 +1,72 @@
-#include "s21_matrix.h"
+#include "tests.h"
 
-matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B)
-{
-    int sum = 0;
+START_TEST(test_mult_matrix_invalid) {
+	matrix_t mult;
+	matrix_t A;
+	matrix_t B;
+	init_matrixes_3x3(&A, &B);
 
-    if (A->columns != B->rows || A->rows < 1 || A->columns < 1 || B->rows < 1 || B->columns < 1) {
-		return get_incorrect_matrix();
-	}
-    matrix_t matrix = s21_create_matrix(A->rows, B->columns);
-    for (int i = 0; i < matrix.rows; i++) {
-        for (int j = 0; j < matrix.columns; j++) {
-            sum = 0;
-            for (int k = 0; k < A->columns; k++) {
-                sum += A->matrix[i][k] * B->matrix[k][j];
-            }
-            matrix.matrix[i][j] = sum;
+	A.columns = 4;
+	mult = s21_mult_matrix(&A, &B);
+	ck_assert_int_eq(mult.matrix_type, INCORRECT_MATRIX);
+	
+    A.columns = 3;
+	A.rows = 0;
+	mult = s21_mult_matrix(&A, &B);
+	ck_assert_int_eq(mult.matrix_type, INCORRECT_MATRIX);
+
+	A.rows = 3;
+	A.columns = 0;
+	mult = s21_mult_matrix(&A, &B);
+	ck_assert_int_eq(mult.matrix_type, INCORRECT_MATRIX);
+
+    A.columns = 3;
+    B.rows = 0;
+	mult = s21_mult_matrix(&A, &B);
+	ck_assert_int_eq(mult.matrix_type, INCORRECT_MATRIX);
+
+	B.rows = 3;
+	B.columns = 0;
+	mult = s21_mult_matrix(&A, &B);
+	ck_assert_int_eq(mult.matrix_type, INCORRECT_MATRIX);
+
+	s21_free_matrix(&A, A.rows);
+	s21_free_matrix(&B, B.rows);
+} END_TEST
+
+START_TEST(test_mult_matrix_correct) {
+	matrix_t A;
+	matrix_t B;
+	init_matrixes_3x3(&A, &B);
+
+	matrix_t mult = s21_mult_matrix(&A, &B);
+	matrix_t m_result = s21_create_matrix(3,3);
+	double result[3][3] = {{6,6,6}, {15,15,15}, {24,24,24}};
+	
+	for (int i = 0; i < m_result.rows; i++) {
+        for (int j = 0; j < m_result.columns; j++) {
+            m_result.matrix[i][j] = result[i][j];
         }
     }
-    matrix.matrix_type = CORRECT_MATRIX;
-    return matrix;
+	ck_assert_int_eq(s21_eq_matrix(&mult, &m_result), SUCCESS);
+	
+	s21_free_matrix(&m_result, m_result.rows);
+	s21_free_matrix(&mult, mult.rows);
+	s21_free_matrix(&A, A.rows);
+	s21_free_matrix(&B, B.rows);
+} END_TEST
+
+
+Suite *mult_suite(void) {
+  Suite *s;
+  TCase *tc_core;
+
+  s = suite_create("Mult matrix");
+  tc_core = tcase_create("Core");
+
+  tcase_add_test(tc_core, test_mult_matrix_correct);
+  tcase_add_test(tc_core, test_mult_matrix_invalid);
+  suite_add_tcase(s, tc_core);
+
+  return s;
 }
