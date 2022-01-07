@@ -15,5 +15,7 @@ Suite *sum_suite(void);
 Suite *sub_suite(void);
 Suite *trans_suite(void);
 Suite *mult_suite(void);
+Suite *mult_number_suite(void);
+Suite *determ_suite(void);
 
 #endif

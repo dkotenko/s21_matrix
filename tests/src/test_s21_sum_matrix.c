@@ -27,6 +27,8 @@ START_TEST(test_sum_invalid) {
 	sum = s21_sum_matrix(&A, &B);
 	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
 	
+	A.rows = 3;
+	B.rows = 3;
 	s21_free_matrix(&A, A.rows);
 	s21_free_matrix(&B, B.rows);
 } END_TEST

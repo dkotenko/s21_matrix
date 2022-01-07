@@ -31,12 +31,11 @@ matrix_t s21_mult_number(matrix_t *A, double number);
 matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B);
 matrix_t s21_transpose(matrix_t *A);
 matrix_t s21_calc_complements(matrix_t *A);
-double s21_determinant(matrix_t *A);
 matrix_t s21_inverse_matrix(matrix_t *A);
-matrix_t    get_incorrect_matrix(void);
+matrix_t get_incorrect_matrix(void);
 void s21_free_matrix(matrix_t *matrix, int i);
-
-Suite *sub_suite(void);
+double s21_determinant(matrix_t *A);
+double s21_determinant_array(double **B, int m, int n);
 
 
 #endif

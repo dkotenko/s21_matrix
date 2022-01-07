@@ -48,6 +48,9 @@ int main(void) {
     srunner_add_suite(runner, sub_suite());
     srunner_add_suite(runner, trans_suite());
     srunner_add_suite(runner, mult_suite());
+    srunner_add_suite(runner, mult_number_suite());
+    srunner_add_suite(runner, determ_suite());
+    
 
     srunner_run_all(runner, CK_NORMAL);  
     no_failed = srunner_ntests_failed(runner); 

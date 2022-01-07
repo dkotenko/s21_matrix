@@ -11,6 +11,5 @@ matrix_t s21_transpose(matrix_t *A)
 			matrix.matrix[j][i] = A->matrix[i][j];
 		}
 	}
-	matrix.matrix_type = CORRECT_MATRIX;
 	return matrix;
 }
