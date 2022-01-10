@@ -2,11 +2,12 @@
 
 START_TEST(test_remove) {
 	matrix_t m = s21_create_matrix(3, 3);
-	s21_free_matrix(&m, m.rows);
+	s21_remove_matrix(&m);
+  ck_assert_int_eq(m.matrix_type, INCORRECT_MATRIX);
 } END_TEST
 
 
-Suite *trans_remove(void) {
+Suite *remove_suite(void) {
   Suite *s;
   TCase *tc_core;
 

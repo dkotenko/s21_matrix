@@ -1,5 +1,23 @@
 #include "s21_matrix.h"
 
+double **s21_create_matrix_array(int rows, int columns)
+{
+	double **matrix;
+	
+	matrix = malloc(sizeof(double *) * rows);
+	if (!matrix) {
+		return NULL;
+	}
+	for (int i = 0; i < columns; i++) {
+		matrix[i] = calloc(columns, sizeof(double));
+		if (!matrix[i]) {
+			s21_free_matrix_array(matrix, i);
+			return NULL;
+		}
+	}
+	return matrix;
+}
+
 matrix_t s21_create_matrix(int rows, int columns)
 {
 	matrix_t matrix;
@@ -8,17 +26,9 @@ matrix_t s21_create_matrix(int rows, int columns)
 		matrix.matrix_type = INCORRECT_MATRIX;
 		return matrix;
 	}
-
-	matrix.matrix = malloc(sizeof(double *) * rows);
+	matrix.matrix = s21_create_matrix_array(rows, columns);
 	if (!matrix.matrix) {
 		return get_incorrect_matrix();
-	}
-	for (int i = 0; i < columns; i++) {
-		matrix.matrix[i] = calloc(columns, sizeof(double));
-		if (!matrix.matrix[i]) {
-			s21_free_matrix(&matrix, i);
-			return get_incorrect_matrix();
-		}
 	}
 	matrix.matrix_type = ZERO_MATRIX;
 	matrix.rows = rows;

@@ -1,4 +1,5 @@
 #include "s21_matrix.h"
+#include <math.h>
 
 /*
 ** B[m][n]
@@ -18,17 +19,10 @@ double s21_determinant_array(double **B, int m, int n) {
         return (B[0][0]*B[1][1] - B[1][0]*B[0][1]);
 
     else {
-        double **minor; //[row_size-1][column_size-1];
         int malloc_size = row_size - 1;
-        minor = (double **)malloc(sizeof(double *) * (row_size - 1));
+        double **minor = s21_create_matrix_array(malloc_size, malloc_size); //[row_size-1][column_size-1];
         if (!minor) {
-            exit(1);
-        }
-        for (int i = 0; i < row_size - 1; i++) {
-            minor[i] = (double *)malloc(sizeof(double) * (column_size - 1));
-            if (!minor[i]) {
-                exit(1);
-            }
+            NAN;
         }
 
         int row_minor, column_minor;
@@ -68,10 +62,7 @@ double s21_determinant_array(double **B, int m, int n) {
                 sum -= B[0][firstrow_columnindex] * s21_determinant_array(minor, m, n);
 
         }
-        for (int i = 0; i < malloc_size; i++) {
-            free(minor[i]);
-        }
-        free(minor);
+        s21_free_matrix_array(minor, malloc_size);
         return sum;
     }
 }

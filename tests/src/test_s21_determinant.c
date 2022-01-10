@@ -79,7 +79,7 @@ Suite *determ_suite(void) {
   Suite *s;
   TCase *tc_core;
 
-  s = suite_create("determ matrix");
+  s = suite_create("Determinant");
   tc_core = tcase_create("Core");
 
   tcase_add_test(tc_core, test_determ_correct);

@@ -50,6 +50,9 @@ int main(void) {
     srunner_add_suite(runner, mult_suite());
     srunner_add_suite(runner, mult_number_suite());
     srunner_add_suite(runner, determ_suite());
+    srunner_add_suite(runner, remove_suite());
+    srunner_add_suite(runner, inverse_suite());
+    //srunner_add_suite(runner, inverse_suite());
     
 
     srunner_run_all(runner, CK_NORMAL);  

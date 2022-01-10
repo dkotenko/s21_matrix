@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-#define NAN 0.0 / 0.0
 #define SUCCESS 1
 #define FAILURE 0
 #include <check.h>
@@ -23,6 +22,7 @@ typedef struct matrix_struct {
 } matrix_t;
 
 matrix_t s21_create_matrix(int rows, int columns);
+double **s21_create_matrix_array(int rows, int columns);
 void s21_remove_matrix(matrix_t *A);
 int s21_eq_matrix(matrix_t *A, matrix_t *B);
 matrix_t s21_sum_matrix(matrix_t *A, matrix_t *B);
@@ -34,6 +34,7 @@ matrix_t s21_calc_complements(matrix_t *A);
 matrix_t s21_inverse_matrix(matrix_t *A);
 matrix_t get_incorrect_matrix(void);
 void s21_free_matrix(matrix_t *matrix, int i);
+void s21_free_matrix_array(double **matrix, int i);
 double s21_determinant(matrix_t *A);
 double s21_determinant_array(double **B, int m, int n);
 
