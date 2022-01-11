@@ -1,47 +1,18 @@
 #include "s21_matrix.h"
 #include <math.h>
-
-/*
-double static **inverse_m(double **num, int size)
-{
-    double b[25][25], fac[25][25];
-    int p, q, m, n, i, j, f;
-    f = size;
-    for (q = 0;q < f; q++)
-    {
-        for (p = 0;p < f; p++)
-        {
-            m = 0;
-            n = 0;
-            for (i = 0;i < f; i++)
-            {
-            for (j = 0;j < f; j++)
-                {
-                    if (i != q && j != p)
-                    {
-                        b[m][n] = num[i][j];
-                        if (n < (f - 2)) {
-                            n++;
-                        } else {
-                            n = 0;
-                            m++;
-                        }
-                    }
-                }
-            }
-            fac[q][p] = pow(-1, q + p) * determinant(b, f - 1);
-        }
-    }
-    transpose(num, fac, f);
-}
-*/
+#include <stdio.h>
 
 static double **inverse(double **src, int size)
 {
-	double a[size + 1][size + 1], ratio;
+	
 	int i,j,k,n;
-		 
-    n = size + 1;
+
+	n = size;
+
+    double a[(n * 2) + 1][(n * 2) + 1];
+    double ratio;
+    
+    
     for(i=1;i<=n;i++)
     {
         for(j=1;j<=n;j++)
@@ -50,6 +21,7 @@ static double **inverse(double **src, int size)
             a[i][j] = src[i - 1][j - 1];
         }
     }
+    
     /* Augmenting Identity Matrix of Order n */
     for(i=1;i<=n;i++)
     {
@@ -65,6 +37,7 @@ static double **inverse(double **src, int size)
             }
         }
     }
+    
     /* Applying Gauss Jordan Elimination */
     for(i=1;i<=n;i++)
     {
@@ -84,6 +57,8 @@ static double **inverse(double **src, int size)
             }
         }
     }
+    
+    
     /* Row Operation to Make Principal Diagonal to 1 */
     for(i=1;i<=n;i++)
     {
@@ -93,13 +68,14 @@ static double **inverse(double **src, int size)
         }
     }
 
+    
     double **matrix = s21_create_matrix_array(size, size);
     int m = 0;
     int p;
-
+    
     for(i=1;i<=n;i++)
     {
-        m = 0;
+        p = 0;
         for(j=n+1;j<=2*n;j++)
         {
             matrix[m][p] = a[i][j];
@@ -107,7 +83,7 @@ static double **inverse(double **src, int size)
         }
         m++;
     }
-    return(0);
+    return matrix;
 }
 
 matrix_t s21_inverse_matrix(matrix_t *A)
