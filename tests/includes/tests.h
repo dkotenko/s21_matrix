@@ -19,5 +19,6 @@ Suite *mult_number_suite(void);
 Suite *determ_suite(void);
 Suite *remove_suite(void);
 Suite *inverse_suite(void);
+Suite *calc_complements_suite(void);
 
 #endif

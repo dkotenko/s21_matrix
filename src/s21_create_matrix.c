@@ -28,7 +28,7 @@ matrix_t s21_create_matrix(int rows, int columns)
 	}
 	matrix.matrix = s21_create_matrix_array(rows, columns);
 	if (!matrix.matrix) {
-		return get_incorrect_matrix();
+		return s21_get_incorrect_matrix();
 	}
 	matrix.matrix_type = ZERO_MATRIX;
 	matrix.rows = rows;

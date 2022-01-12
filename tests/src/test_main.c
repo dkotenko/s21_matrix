@@ -52,7 +52,7 @@ int main(void) {
     srunner_add_suite(runner, determ_suite());
     srunner_add_suite(runner, remove_suite());
     srunner_add_suite(runner, inverse_suite());
-    //srunner_add_suite(runner, inverse_suite());
+    srunner_add_suite(runner, calc_complements_suite());
     
 
     srunner_run_all(runner, CK_NORMAL);  

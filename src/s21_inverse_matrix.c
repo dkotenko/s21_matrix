@@ -89,12 +89,12 @@ static double **inverse(double **src, int size)
 matrix_t s21_inverse_matrix(matrix_t *A)
 {
     if (A->rows != A->columns || A->rows < 1 || A->columns < 1) {
-		return get_incorrect_matrix();
+		return s21_get_incorrect_matrix();
 	}
     matrix_t inverse_matrix = s21_create_matrix(A->rows, A->columns);
     double **inverse_array = inverse(A->matrix, A->rows);
     if (!inverse_array) {
-        return get_incorrect_matrix();
+        return s21_get_incorrect_matrix();
     }
     s21_free_matrix(&inverse_matrix, A->rows);
     inverse_matrix.matrix = inverse_array;

@@ -32,7 +32,7 @@ matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B);
 matrix_t s21_transpose(matrix_t *A);
 matrix_t s21_calc_complements(matrix_t *A);
 matrix_t s21_inverse_matrix(matrix_t *A);
-matrix_t get_incorrect_matrix(void);
+matrix_t s21_get_incorrect_matrix(void);
 void s21_free_matrix(matrix_t *matrix, int i);
 void s21_free_matrix_array(double **matrix, int i);
 double s21_determinant(matrix_t *A);

@@ -5,7 +5,7 @@ matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B)
     int sum = 0;
 
     if (A->columns != B->rows || A->rows < 1 || A->columns < 1 || B->rows < 1 || B->columns < 1) {
-		return get_incorrect_matrix();
+		return s21_get_incorrect_matrix();
 	}
     matrix_t matrix = s21_create_matrix(A->rows, B->columns);
     for (int i = 0; i < matrix.rows; i++) {

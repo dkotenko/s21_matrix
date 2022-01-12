@@ -3,20 +3,21 @@
 
 START_TEST(test_inverse_invalid) {
 	matrix_t m = s21_create_matrix(2,2);
-	double determinant = 0;
+	matrix_t result;
 
 	m.rows = 0;
-	determinant = s21_determinant(&m);
-	ck_assert_int_eq(isnan(determinant), SUCCESS);
+	result = s21_inverse_matrix(&m);
+	ck_assert_int_eq(result.matrix_type, INCORRECT_MATRIX);
 
 	m.rows = 2;
 	m.columns = 0;
-	determinant = s21_determinant(&m);
-	ck_assert_int_eq(isnan(determinant), SUCCESS);
+	result = s21_inverse_matrix(&m);
+	ck_assert_int_eq(result.matrix_type, INCORRECT_MATRIX);
 
 	m.columns = 3;
-	determinant = s21_determinant(&m);
-	ck_assert_int_eq(isnan(determinant), SUCCESS);
+	result = s21_inverse_matrix(&m);
+	ck_assert_int_eq(result.matrix_type, INCORRECT_MATRIX);
+
 	s21_free_matrix(&m, m.rows);
 } END_TEST
 
