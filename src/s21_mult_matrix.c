@@ -7,7 +7,9 @@ matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B)
     if (A->columns != B->rows || A->rows < 1 || A->columns < 1 || B->rows < 1 || B->columns < 1) {
 		return s21_get_incorrect_matrix();
 	}
-    matrix_t matrix = s21_create_matrix(A->rows, B->columns);
+    matrix_t matrix = {0};
+	int res = s21_create_matrix(A->rows, A->columns, &matrix);
+    (void)res;
     for (int i = 0; i < matrix.rows; i++) {
         for (int j = 0; j < matrix.columns; j++) {
             sum = 0;
@@ -17,6 +19,5 @@ matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B)
             matrix.matrix[i][j] = sum;
         }
     }
-    matrix.matrix_type = CORRECT_MATRIX;
     return matrix;
 }

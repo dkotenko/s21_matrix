@@ -40,8 +40,6 @@ TEST_SRCS_FILES=$(notdir $(shell find $(TEST_SRCS_DIR) -name "test_*.c"))
 TEST_SRCS=$(addprefix $(TEST_SRCS_DIR)/, $(TEST_SRCS_FILES))
 TEST_OBJS=$(TEST_SRCS:%.c=%.o)
 
-REPORT_NAME=report.html
-
 ######## LINK ########
 
 OS = $(shell uname)
@@ -59,6 +57,12 @@ CC_TEST = gcc -Wall -Wextra -Werror -Wuninitialized -std=c11
 COV_LIBS = --coverage -lgcov
 THREADS = 8
 
+######## COMPILE ########
+
+GCOV_INFO_FILE=gcovreport.info
+ROOT_FOLDER=.
+REPORT_FOLDER=report
+
 all:
 	$(MAKE) -j$(THREADS) $(NAME)
 
@@ -74,10 +78,10 @@ $(NAME): $(OBJ)
 	@echo $<
 
 $(TEST_NAME): $(NAME) $(TEST_OBJS)
-	$(CC_TEST) $(TEST_OBJS) $(NAME) -o $@ $(TEST_LIBS) $(COV_LIBS)
+	$(CC_TEST) $(TEST_OBJS) -L./ -l:$(NAME) -o $@ $(TEST_LIBS) $(COV_LIBS)
 
-$(TEST_SRCS_DIR)/%.o:$(TEST_SRCS_DIR)/%.c $(TEST_HEADERS_FILES)
-	$(CC_TEST) -I$(TEST_HEADERS_DIR) -I./$(HEADERS_DIR) -c $< -o $@
+$(TEST_SRCS_DIR)/%.o:$(TEST_SRCS_DIR)/%.c $(TEST_HEADERS)
+	$(CC_TEST) -I./$(TEST_HEADERS_DIR) -I./$(HEADERS_DIR) -c $< -o $@
 
 test: 
 	
@@ -86,8 +90,8 @@ test: clean $(TEST_NAME)
 	./$(TEST_NAME)
 
 gcov_report: test
-	@lcov -c -d $(REPORT_FOLDER) -o $(REPORT_NAME)
-	@genhtml gcov_test.info -o $(REPORT_FOLDER)
+	@lcov -o $(GCOV_INFO_FILE) -c -d $(ROOT_FOLDER)
+	@genhtml -o $(REPORT_FOLDER) $(GCOV_INFO_FILE)
 
 clang_fix:
 	@cp ../materials/linters/.clang-format .
@@ -103,14 +107,15 @@ multi:
 	$(MAKE) -j$(THREADS) all
 		
 clean:
-	/bin/rm -f $(OBJ)
-	/bin/rm -f $(TEST_OBJS)
-	find . -name "*.gcda" -type f -delete
-	find . -name "*.gcno" -type f -delete
-	/bin/rm -f $(REPORT_NAME)
+	@/bin/rm -f $(OBJ)
+	@/bin/rm -f $(TEST_OBJS)
+	@find . -name "*.gcda" -type f -delete
+	@find . -name "*.gcno" -type f -delete
+	@/bin/rm -rf $(REPORT_FOLDER)
+	@/bin/rm -f $(GCOV_INFO_FILE)
 fclean: clean
-	/bin/rm -f $(NAME)
-	/bin/rm -f $(TEST_NAME)
+	@/bin/rm -f $(NAME)
+	@/bin/rm -f $(TEST_NAME)
 re: fclean all
 
 

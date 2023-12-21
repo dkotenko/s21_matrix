@@ -1,23 +1,26 @@
 #include "tests.h"
 
 START_TEST(test_create_invalid) {
-  matrix_t sum;
+  matrix_t sum = {0};
+  int res = 0;
 
-	sum = s21_create_matrix(0, 1);
-	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
+	res = s21_create_matrix(0, 1, &sum);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
-  sum = s21_create_matrix(1, 0);
-	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
+  res = s21_create_matrix(1, 0, &sum);
+	ck_assert_int_eq(res, RES_INCORRECT);
 	
 } END_TEST
 
 START_TEST(test_create_matrix) {
-	matrix_t m = s21_create_matrix(3,3);
+  matrix_t m = {0};
+  int res = 0;
+	res = s21_create_matrix(3,3, &m);
 	
+  ck_assert_int_eq(res, RES_OK);
 	ck_assert_int_eq(m.rows, 3);
 	ck_assert_int_eq(m.columns, 3);
   ck_assert_int_eq((int)m.matrix[0][0], 0);
-	ck_assert_int_eq(m.matrix_type, ZERO_MATRIX);
 	s21_free_matrix(&m, m.rows);
 } END_TEST
 

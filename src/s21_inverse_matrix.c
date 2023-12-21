@@ -91,7 +91,9 @@ matrix_t s21_inverse_matrix(matrix_t *A)
     if (A->rows != A->columns || A->rows < 1 || A->columns < 1) {
 		return s21_get_incorrect_matrix();
 	}
-    matrix_t inverse_matrix = s21_create_matrix(A->rows, A->columns);
+    matrix_t inverse_matrix = {0};
+    int res = RES_OK;
+    res |= s21_create_matrix(A->rows, A->columns, &inverse_matrix);
     double **inverse_array = inverse(A->matrix, A->rows);
     if (!inverse_array) {
         return s21_get_incorrect_matrix();
