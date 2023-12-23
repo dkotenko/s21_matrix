@@ -1,9 +1,10 @@
 #include "s21_matrix.h"
 
 START_TEST(test_remove) {
-	matrix_t m = s21_create_matrix(3, 3);
+	matrix_t m = {0};
+  int res = s21_create_matrix(3, 3, &m);
 	s21_remove_matrix(&m);
-  ck_assert_int_eq(m.matrix_type, INCORRECT_MATRIX);
+  ck_assert_int_eq(res, RES_OK);
 } END_TEST
 
 

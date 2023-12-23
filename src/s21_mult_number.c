@@ -1,17 +1,21 @@
 #include "s21_matrix.h"
 
-matrix_t s21_mult_number(matrix_t *A, double number)
+int s21_mult_number(matrix_t *A, double number, matrix_t *result)
 {
+	int result_code = RES_OK;
+
 	if (A->rows < 1 || A->columns < 1) {
-		return s21_get_incorrect_matrix();
+		result_code = RES_INCORRECT;
+	} else {
+		result_code = s21_create_matrix(A->rows, A->columns, result);
 	}
-	matrix_t matrix = {0};
-	int res = s21_create_matrix(A->rows, A->columns, &matrix);
-    (void)res;
-	for (int i = 0; i < A->columns; i++) {
-		for (int j = 0; j < A->rows; j++) {
-			matrix.matrix[i][j] = A->matrix[i][j] * number;
+
+	if (result_code == RES_OK) {
+		for (int i = 0; i < A->columns; i++) {
+			for (int j = 0; j < A->rows; j++) {
+				result->matrix[i][j] = A->matrix[i][j] * number;
+			}
 		}
 	}
-	return matrix;
+	return result_code;
 }

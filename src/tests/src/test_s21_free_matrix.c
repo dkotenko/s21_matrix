@@ -2,7 +2,9 @@
 #include "tests.h"
 
 START_TEST(test_free_matrix) {
-	matrix_t m = s21_create_matrix(2,2);
+  matrix_t m = {0};
+	int res = s21_create_matrix(2,2, &m);
+  PRINT_IF_ERR_CREATE_MATRIX(res);
 		
 	s21_free_matrix(&m, m.rows);
 	ck_assert_ptr_eq(m.matrix, NULL);

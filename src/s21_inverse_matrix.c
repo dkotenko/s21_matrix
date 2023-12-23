@@ -2,11 +2,11 @@
 #include <math.h>
 #include <stdio.h>
 
-static double **inverse(double **src, int size)
+static int inverse(double **src, int size, double **result)
 {
 	
 	int i,j,k,n;
-
+    int result_code = RES_OK;
 	n = size;
 
     double a[(n * 2) + 1][(n * 2) + 1];
@@ -17,7 +17,6 @@ static double **inverse(double **src, int size)
     {
         for(j=1;j<=n;j++)
         {
-            
             a[i][j] = src[i - 1][j - 1];
         }
     }
@@ -43,7 +42,8 @@ static double **inverse(double **src, int size)
     {
         if(a[i][i] == 0.0)
         {
-            return NULL;
+            result_code = RES_CALC_ERROR;
+            break;
         }
         for(j=1;j<=n;j++)
         {
@@ -58,47 +58,53 @@ static double **inverse(double **src, int size)
         }
     }
     
-    
-    /* Row Operation to Make Principal Diagonal to 1 */
-    for(i=1;i<=n;i++)
-    {
-        for(j=n+1;j<=2*n;j++)
+    if (result_code == RES_OK) {
+        /* Row Operation to Make Principal Diagonal to 1 */
+        for(i=1;i<=n;i++)
         {
-        a[i][j] = a[i][j]/a[i][i];
+            for(j=n+1;j<=2*n;j++)
+            {
+                a[i][j] = a[i][j]/a[i][i];
+            }
         }
-    }
 
-    
-    double **matrix = s21_create_matrix_array(size, size);
-    int m = 0;
-    int p;
-    
-    for(i=1;i<=n;i++)
-    {
-        p = 0;
-        for(j=n+1;j<=2*n;j++)
-        {
-            matrix[m][p] = a[i][j];
-            p++;
+        if (result) {
+            int m = 0;
+            int p;
+            
+            for(i=1;i<=n;i++)
+            {
+                p = 0;
+                for(j=n+1;j<=2*n;j++)
+                {
+                    result[m][p] = a[i][j];
+                    p++;
+                }
+                m++;
+            }
+        } else {
+            result_code = RES_INCORRECT;
         }
-        m++;
     }
-    return matrix;
+    return result_code;
 }
 
-matrix_t s21_inverse_matrix(matrix_t *A)
+int s21_inverse_matrix(matrix_t *A, matrix_t *result)
 {
+    int result_code = RES_OK;
+
     if (A->rows != A->columns || A->rows < 1 || A->columns < 1) {
-		return s21_get_incorrect_matrix();
-	}
-    matrix_t inverse_matrix = {0};
-    int res = RES_OK;
-    res |= s21_create_matrix(A->rows, A->columns, &inverse_matrix);
-    double **inverse_array = inverse(A->matrix, A->rows);
-    if (!inverse_array) {
-        return s21_get_incorrect_matrix();
+		result_code |= RES_INCORRECT;
+	} else {
+        result_code |= s21_create_matrix(A->rows, A->columns, result);
     }
-    s21_free_matrix(&inverse_matrix, A->rows);
-    inverse_matrix.matrix = inverse_array;
-    return inverse_matrix;
+    
+    if (result_code == RES_OK) {
+        double **inverse_array = NULL;
+        result_code = inverse(A->matrix, A->rows, result->matrix);
+        if (!inverse_array) {
+            result_code = RES_INCORRECT;
+        }
+    }
+    return result_code;
 }

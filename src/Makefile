@@ -8,7 +8,6 @@ SRCS_FILES=s21_calc_complements.c \
 	s21_create_matrix.c \
 	s21_determinant.c \
 	s21_eq_matrix.c \
-	s21_get_incorrect_matrix.c \
 	s21_inverse_matrix.c \
 	s21_mult_matrix.c \
 	s21_mult_number.c \
@@ -71,7 +70,6 @@ $(NAME): $(OBJ)
 	@echo =================================
 	@echo $(NAME) HAS BEEN MADE          
 	@echo =================================	
-	$(info    VAR: $(TEST_OBJS))
 
 %.o:%.c $(HEADERS)
 	@$(CC_LIB) -I./$(HEADERS_DIR) -c $< -o $@
@@ -83,8 +81,6 @@ $(TEST_NAME): $(NAME) $(TEST_OBJS)
 $(TEST_SRCS_DIR)/%.o:$(TEST_SRCS_DIR)/%.c $(TEST_HEADERS)
 	$(CC_TEST) -I./$(TEST_HEADERS_DIR) -I./$(HEADERS_DIR) -c $< -o $@
 
-test: 
-	
 test: CC_LIB = $(CC_LIB_CVR)
 test: clean $(TEST_NAME)
 	./$(TEST_NAME)

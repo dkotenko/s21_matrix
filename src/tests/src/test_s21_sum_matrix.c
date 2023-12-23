@@ -1,31 +1,31 @@
 #include "tests.h"
 
 START_TEST(test_sum_invalid) {
-	matrix_t sum;
-	matrix_t A;
-	matrix_t B;
-	init_matrixes_3x3(&A, &B);
+	matrix_t sum = {0};
+	matrix_t A = {0};
+	matrix_t B = {0};
+	int res = init_matrixes_3x3(&A, &B);
 
 	A.columns = 4;
-	sum = s21_sum_matrix(&A, &B);
-	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
+	res = s21_sum_matrix(&A, &B, &sum);
+	ck_assert_int_eq(res, RES_INCORRECT);
 	
 	A.rows = 4;
 	A.columns = 3;
-	sum = s21_sum_matrix(&A, &B);
-	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
+	res = s21_sum_matrix(&A, &B, &sum);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
 	A.rows = 0;
 	B.rows = 0;
-	sum = s21_sum_matrix(&A, &B);
-	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
+	res = s21_sum_matrix(&A, &B, &sum);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
 	A.rows = 1;
 	B.rows = 1;
 	A.columns = 0;
 	B.columns = 0;
-	sum = s21_sum_matrix(&A, &B);
-	ck_assert_int_eq(sum.matrix_type, INCORRECT_MATRIX);
+	res = s21_sum_matrix(&A, &B, &sum);
+	ck_assert_int_eq(res, RES_INCORRECT);
 	
 	A.rows = 3;
 	B.rows = 3;
@@ -34,12 +34,14 @@ START_TEST(test_sum_invalid) {
 } END_TEST
 
 START_TEST(test_sum_correct) {
-	matrix_t A;
-	matrix_t B;
+	matrix_t A = {0};
+	matrix_t B = {0};
 	init_matrixes_3x3(&A, &B);
 
-	matrix_t sum = s21_sum_matrix(&A, &B);
-	matrix_t m_result = s21_create_matrix(3,3);
+	matrix_t sum = {0};
+	s21_sum_matrix(&A, &B, &sum);
+	matrix_t m_result = {0};
+	s21_create_matrix(3,3, &m_result);
 	double result[3][3] = {{2,3,4}, {5,6,7}, {8,9,10}};
 	
 	for (int i = 0; i < m_result.rows; i++) {

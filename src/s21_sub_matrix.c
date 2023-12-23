@@ -1,20 +1,22 @@
 #include "s21_matrix.h"
 #include <check.h>
 
-matrix_t s21_sub_matrix(matrix_t *A, matrix_t *B)
+int s21_sub_matrix(matrix_t *A, matrix_t *B, matrix_t *result)
 {
+	int result_code = RES_OK;
+
 	if (A->columns != B->columns || A->rows != B->rows || A->rows < 1 || A->columns < 1) {
-		return s21_get_incorrect_matrix();
+		result_code = RES_INCORRECT;
+	} else {
+		result_code = s21_create_matrix(A->rows, A->columns, result);
 	}
-	matrix_t matrix = {0};
-	int res = s21_create_matrix(A->rows, A->columns, &matrix);
-	if (res == RES_OK) {
+
+	if (result_code == RES_OK) {
 		for (int i = 0; i < A->columns; i++) {
 			for (int j = 0; j < A->rows; j++) {
-				matrix.matrix[i][j] = A->matrix[i][j] - B->matrix[i][j];
+				result->matrix[i][j] = A->matrix[i][j] - B->matrix[i][j];
 			}
 		}	
 	}
-	
-	return matrix;
+	return result_code;
 }

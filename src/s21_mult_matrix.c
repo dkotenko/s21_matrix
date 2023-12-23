@@ -1,23 +1,25 @@
 #include "s21_matrix.h"
 
-matrix_t s21_mult_matrix(matrix_t *A, matrix_t *B)
+int s21_mult_matrix(matrix_t *A, matrix_t *B, matrix_t *result)
 {
-    int sum = 0;
+    int result_code = RES_OK;
 
     if (A->columns != B->rows || A->rows < 1 || A->columns < 1 || B->rows < 1 || B->columns < 1) {
-		return s21_get_incorrect_matrix();
-	}
-    matrix_t matrix = {0};
-	int res = s21_create_matrix(A->rows, A->columns, &matrix);
-    (void)res;
-    for (int i = 0; i < matrix.rows; i++) {
-        for (int j = 0; j < matrix.columns; j++) {
-            sum = 0;
-            for (int k = 0; k < A->columns; k++) {
-                sum += A->matrix[i][k] * B->matrix[k][j];
-            }
-            matrix.matrix[i][j] = sum;
+		result_code = RES_INCORRECT;
+	} else {
+        result_code = s21_create_matrix(A->rows, A->columns, result);
+    }
+
+    if (result_code == RES_OK) {
+        for (int i = 0; i < result->rows; i++) {
+            for (int j = 0; j < result->columns; j++) {
+                int sum = 0;
+                for (int k = 0; k < A->columns; k++) {
+                    sum += A->matrix[i][k] * B->matrix[k][j];
+                }
+                result->matrix[i][j] = sum;
+            }           
         }
     }
-    return matrix;
+    return result_code;
 }

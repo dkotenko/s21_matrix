@@ -2,9 +2,7 @@
 
 double **s21_create_matrix_array(int rows, int columns)
 {
-	double **matrix = NULL;
-	
-	matrix = malloc(sizeof(double *) * rows);
+	double **matrix = malloc(sizeof(double *) * rows);
 	if (matrix) {
 		for (int i = 0; i < columns; i++) {
 			matrix[i] = calloc(columns, sizeof(double));

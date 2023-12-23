@@ -2,7 +2,7 @@
 
 START_TEST(test_create_invalid) {
   matrix_t sum = {0};
-  int res = 0;
+  int res = RES_OK;
 
 	res = s21_create_matrix(0, 1, &sum);
 	ck_assert_int_eq(res, RES_INCORRECT);
@@ -14,7 +14,7 @@ START_TEST(test_create_invalid) {
 
 START_TEST(test_create_matrix) {
   matrix_t m = {0};
-  int res = 0;
+  int res = RES_OK;
 	res = s21_create_matrix(3,3, &m);
 	
   ck_assert_int_eq(res, RES_OK);

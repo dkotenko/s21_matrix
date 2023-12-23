@@ -1,17 +1,21 @@
 #include "s21_matrix.h"
 
-matrix_t s21_transpose(matrix_t *A)
+int s21_transpose(matrix_t *A, matrix_t *result)
 {
+	int result_code = RES_OK;
+
 	if (A->rows < 1 || A->columns < 1) {
-		return s21_get_incorrect_matrix();
+		result_code = RES_INCORRECT;
+	} else {
+		result_code = s21_create_matrix(A->rows, A->columns, result);
 	}
-	matrix_t matrix = {0};
-	int res = s21_create_matrix(A->rows, A->columns, &matrix);
-	(void) res;
-	for (int i = 0; i < A->rows; i++) {
-		for (int j = 0; j < A->columns; j++) {
-			matrix.matrix[j][i] = A->matrix[i][j];
+
+	if (result_code == RES_OK) {
+		for (int i = 0; i < A->rows; i++) {
+			for (int j = 0; j < A->columns; j++) {
+				result->matrix[j][i] = A->matrix[i][j];
+			}
 		}
 	}
-	return matrix;
+	return result_code;
 }

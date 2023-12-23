@@ -1,26 +1,28 @@
 #include "tests.h"
 
 START_TEST(test_trans_invalid) {
-	matrix_t m = s21_create_matrix(2,2);
+	matrix_t m = {0};
+	int res = s21_create_matrix(2,2, &m);
 
 	m.rows = 0;
-	matrix_t trans = s21_transpose(&m);
-	ck_assert_int_eq(trans.matrix_type, INCORRECT_MATRIX);
+	matrix_t trans = {0};
+	res = s21_transpose(&m, &trans);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
 	m.rows = 2;
 	m.columns = 0;
-	trans = s21_transpose(&m);
-	ck_assert_int_eq(trans.matrix_type, INCORRECT_MATRIX);
+	res = s21_transpose(&m, &trans);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
 	s21_free_matrix(&m, m.rows);
 } END_TEST
 
 START_TEST(test_trans_correct) {
-	matrix_t src;
-	matrix_t dest;
+	matrix_t src = {0};
+	matrix_t dest = {0};
 
-	src = s21_create_matrix(3, 3);
-	dest = s21_create_matrix(3, 3);
+	s21_create_matrix(3, 3, &src);
+	s21_create_matrix(3, 3, &dest);
 
 	/*
 	1 2 3
@@ -52,7 +54,8 @@ START_TEST(test_trans_correct) {
 	dest.matrix[2][1] = 6;
 	dest.matrix[2][2] = 9;
 
-	matrix_t trans = s21_transpose(&src);
+	matrix_t trans = {0};
+	s21_transpose(&src, &trans);
 	ck_assert_int_eq(s21_eq_matrix(&dest, &trans), SUCCESS);
 	s21_free_matrix(&src, src.rows);
 	s21_free_matrix(&dest, dest.rows);

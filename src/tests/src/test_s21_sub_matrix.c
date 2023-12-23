@@ -1,31 +1,32 @@
 #include "tests.h"
 
 START_TEST(test_sub_invalid) {
-	matrix_t sub;
-	matrix_t A;
-	matrix_t B;
+	matrix_t sub = {0};
+	matrix_t A = {0};
+	matrix_t B = {0};
+	int res = 0;
 	init_matrixes_3x3(&A, &B);
 
 	A.columns = 4;
-	sub = s21_sub_matrix(&A, &B);
-	ck_assert_int_eq(sub.matrix_type, INCORRECT_MATRIX);
+	res = s21_sub_matrix(&A, &B, &sub);
+	ck_assert_int_eq(res, RES_INCORRECT);
 	
 	A.rows = 4;
 	A.columns = 3;
-	sub = s21_sub_matrix(&A, &B);
-	ck_assert_int_eq(sub.matrix_type, INCORRECT_MATRIX);
+	res = s21_sub_matrix(&A, &B, &sub);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
 	A.rows = 0;
 	B.rows = 0;
-	sub = s21_sub_matrix(&A, &B);
-	ck_assert_int_eq(sub.matrix_type, INCORRECT_MATRIX);
+	res = s21_sub_matrix(&A, &B, &sub);
+	ck_assert_int_eq(res, RES_INCORRECT);
 
 	A.rows = 1;
 	B.rows = 1;
 	A.columns = 0;
 	B.columns = 0;
-	sub = s21_sub_matrix(&A, &B);
-	ck_assert_int_eq(sub.matrix_type, INCORRECT_MATRIX);
+	res = s21_sub_matrix(&A, &B, &sub);
+	ck_assert_int_eq(res, RES_INCORRECT);
 	
 	A.rows = 3;
 	B.rows = 3;
@@ -34,12 +35,14 @@ START_TEST(test_sub_invalid) {
 } END_TEST
 
 START_TEST(test_sub_correct) {
-	matrix_t A;
-	matrix_t B;
+	matrix_t A = {0};
+	matrix_t B = {0};
+	matrix_t sub = {0};
 	init_matrixes_3x3(&A, &B);
 
-	matrix_t sub = s21_sub_matrix(&A, &B);
-	matrix_t m_result = s21_create_matrix(3,3);
+	s21_sub_matrix(&A, &B, &sub);
+	matrix_t m_result = {0};
+	s21_create_matrix(3,3, &m_result);
 	double result[3][3] = {{0,1,2}, {3,4,5}, {6,7,8}};
 	
 	for (int i = 0; i < m_result.rows; i++) {
